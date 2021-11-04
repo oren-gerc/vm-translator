@@ -49,6 +49,8 @@ class CodeWriter:
             segment (str): the memory segment to operate on.
             index (int): the index in the memory segment.
         """
+        # add other memories
+
         self.output_file.write(utils.ASM_commands[command].format(index, segment))
 
     def close(self) -> None:
