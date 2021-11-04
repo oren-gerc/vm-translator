@@ -37,8 +37,7 @@ class CodeWriter:
         Args:
             command (str): an arithmetic command.
         """
-        line = utils.getAsmArithmetic[utils.command_type_dict[command]]
-        self.output_file.write(line + "\n")
+        pass
 
     def write_push_pop(self, command: str, segment: str, index: int) -> None:
         """Writes the assembly code that is the translation of the given 
@@ -49,9 +48,15 @@ class CodeWriter:
             segment (str): the memory segment to operate on.
             index (int): the index in the memory segment.
         """
-        # add other memories
+        to_write = ""
 
-        self.output_file.write(utils.ASM_commands[command].format(index, segment))
+        if command == "C_PUSH":
+            if segment in [utils.CONST, utils.TEMP, utils.POINTER, utils.STATIC]:
+                to_write = utils.ASM_PUSH_1_PARAM[segment].format(index)
+            else:  # segments: local, this, that, argument
+                to_write = utils.generic_push_asm.format(index, segment)
+
+        self.output_file.write(to_write)
 
     def close(self) -> None:
         """Closes the output file."""
