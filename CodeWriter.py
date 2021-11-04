@@ -5,6 +5,7 @@ and as allowed by the Creative Common Attribution-NonCommercial-ShareAlike 3.0
 Unported License (https://creativecommons.org/licenses/by-nc-sa/3.0/).
 """
 import typing
+import utils
 
 
 class CodeWriter:
@@ -20,7 +21,7 @@ class CodeWriter:
 
     # I DON'T KNOW WHAT THIS IS
     def set_file_name(self, filename: str) -> None:
-        """Informs the code writer that the translation of a new VM file is 
+        """Informs the code writer that the translation of a new VM file has
         started.
 
         Args:
@@ -36,8 +37,8 @@ class CodeWriter:
         Args:
             command (str): an arithmetic command.
         """
-        # Your code goes here!
-        pass
+        line = utils.getAsmArithmetic[utils.command_type_dict[command]]
+        self.output_file.write(line + "\n")
 
     def write_push_pop(self, command: str, segment: str, index: int) -> None:
         """Writes the assembly code that is the translation of the given 
