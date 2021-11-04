@@ -8,18 +8,12 @@ import typing
 import utils
 
 
-# CHANGE PARSING! NEEDS TO SUPPORT WHITESPACES INSIDE THE LINE ITSELF
 def clean(commands):
-    # strip white spaces from commands
+    # strip comments from commands
     for i, command in enumerate(commands):
-        commands[i] = command.replace(" ", "")
         if "//" in command:
             del_ind = command.find("/")
             commands[i] = command[:del_ind]
-            commands[i] = commands[i].replace(" ", "")
-            #123
-    value_to_remove = ""
-    commands = [command for command in commands if command != value_to_remove]
     return commands
 
 
@@ -66,7 +60,8 @@ class Parser:
             "C_PUSH", "C_POP", "C_LABEL", "C_GOTO", "C_IF", "C_FUNCTION",
             "C_RETURN", "C_CALL".
         """
-        return utils.command_type_dict[self.command]
+
+        return utils.command_type_dict[self.command.split()[0]]
 
     def arg1(self) -> str:
         """
