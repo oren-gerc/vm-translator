@@ -17,7 +17,7 @@ def clean(commands):
             del_ind = command.find("/")
             commands[i] = command[:del_ind]
             commands[i] = commands[i].replace(" ", "")
-
+            #123
     value_to_remove = ""
     commands = [command for command in commands if command != value_to_remove]
     return commands
