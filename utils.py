@@ -36,10 +36,10 @@ generic_push_asm = "@{0} //index\n\
                     \n\
                     @SP \n\
                     M=M-1 \n"
-const_push_asm = ""
-temp_push_asm = ""
-pointer_push_asm = ""
-static_push_asm = ""
+const_push_asm = "{}"
+temp_push_asm = "{}"
+pointer_push_asm = "{}"
+static_push_asm = "{}"
 
 # memory segments
 CONST = "constant"
