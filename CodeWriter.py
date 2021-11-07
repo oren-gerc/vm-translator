@@ -18,6 +18,7 @@ class CodeWriter:
             output_stream (typing.TextIO): output stream.
         """
         self.output_file = output_stream
+        self.file_name = ""
 
     def set_file_name(self, filename: str) -> None:
         """Informs the code writer that the translation of a new VM file has
@@ -27,7 +28,7 @@ class CodeWriter:
             filename (str): The name of the VM file.
         """
         # Your code goes here!
-        pass
+        self.file_name = filename
 
     def write_arithmetic(self, command: str) -> None:
         """Writes the assembly code that is the translation of the given 

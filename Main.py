@@ -24,7 +24,7 @@ def translate_file(
     input_filename, input_extension = os.path.splitext(os.path.basename(input_file.name))
     parser = Parser(input_file)
     code_writer = CodeWriter(output_file)
-    output_filename = code_writer.set_file_name(input_filename)
+    code_writer.set_file_name(input_filename)
     while parser.has_more_commands():
         command_type = parser.command_type()
         if command_type == "C_ARITHMETIC":
