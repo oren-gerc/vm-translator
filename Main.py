@@ -21,8 +21,18 @@ def translate_file(
     """
     # Your code goes here!
     # Note: you can get the input file's name using:
-    # input_filename, input_extension = os.path.splitext(os.path.basename(input_file.name))
-    pass
+    input_filename, input_extension = os.path.splitext(os.path.basename(input_file.name))
+    parser = Parser(input_file)
+    code_writer = CodeWriter(output_file)
+    output_filename = code_writer.set_file_name(input_filename)
+    while parser.hasore_commands():
+        command_type = parser.command_type()
+        if command_type == "C_ARITHMETIC":
+            code_writer.write_arithmetic(parser.command)
+        else:
+            code_writer.write_push_pop(parser.command, parser.arg1(), parser.arg2())
+        parser.advance()
+    code_writer.close()
 
 
 if "__main__" == __name__:
