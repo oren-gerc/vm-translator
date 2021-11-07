@@ -19,7 +19,6 @@ class CodeWriter:
         """
         self.output_file = output_stream
 
-    # I DON'T KNOW WHAT THIS IS
     def set_file_name(self, filename: str) -> None:
         """Informs the code writer that the translation of a new VM file has
         started.
@@ -37,7 +36,8 @@ class CodeWriter:
         Args:
             command (str): an arithmetic command.
         """
-        pass
+        assembly = utils.ARITHMETIC_TO_ASM[command]
+        self.output_file.write(assembly)
 
     def write_push_pop(self, command: str, segment: str, index: int) -> None:
         """Writes the assembly code that is the translation of the given 
@@ -52,13 +52,16 @@ class CodeWriter:
 
         if command == "C_PUSH":
             if segment in [utils.CONST, utils.TEMP, utils.POINTER, utils.STATIC]:
-                to_write = utils.ASM_PUSH_1_PARAM[segment].format(index)
+                to_write = utils.PUSH_TO_ASM[segment].format(index)
             else:  # segments: local, this, that, argument
                 to_write = utils.generic_push_asm.format(index, segment)
-
+        elif command == "C_POP":
+            if segment in [utils.CONST, utils.TEMP, utils.POINTER, utils.STATIC]:
+                to_write = utils.POP_TO_ASM[segment].format(index)
+            else:  # segments: local, this, that, argument
+                to_write = utils.generic_pop_asm.format(index, segment)
         self.output_file.write(to_write)
 
     def close(self) -> None:
         """Closes the output file."""
-        # Your code goes here!
-        pass
+        self.output_file.close()
