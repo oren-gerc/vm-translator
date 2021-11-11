@@ -19,6 +19,7 @@ class CodeWriter:
         """
         self.output_file = output_stream
         self.file_name = ""
+        self._comparison_command_index = 0
 
     def set_file_name(self, filename: str) -> None:
         """Informs the code writer that the translation of a new VM file has
@@ -37,7 +38,12 @@ class CodeWriter:
         Args:
             command (str): an arithmetic command.
         """
-        assembly = utils.ARITHMETIC_TO_ASM[command]
+        if command in utils.comparison_commands:
+            assembly = utils.comparison_asm.format(utils.comparison_commands[command],
+                                                   self._comparison_command_index)
+            self._comparison_command_index += 1
+        else:
+            assembly = utils.ARITHMETIC_TO_ASM[command]
         self.output_file.write(assembly)
 
     def write_push_pop(self, command: str, segment: str, index: int) -> None:
