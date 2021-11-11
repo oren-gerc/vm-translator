@@ -48,21 +48,20 @@ generic_pop_asm = "@{0} //index\n\
                     @addr\n\
                     A=M\n\
                     M=D"
-const_pop_asm = "{}"
 temp_pop_asm = "{}"
 pointer_pop_asm = "{}"
 static_pop_asm = "{}"
 
 push_asm = """
-//assumes D register is loaded with the value to push into stack
-//*sp=D
-@SP
-A=M
-M=D
-
-//sp++
-@SP
-M=M+1
+        //assumes D register is loaded with the value to push into stack
+        //*sp=D
+        @SP
+        A=M
+        M=D
+        
+        //sp++
+        @SP
+        M=M+1
 """
 general_segment_push_asm = """
 @{0}
@@ -79,44 +78,73 @@ static_push_asm = """
 @{0}.{1}
 D=M
 """ + push_asm
-
-# WHAT TO DO WITH THESE???
 temp_push_asm = """
 
 """
-pointer_push_asm = "{}"
+pointer_push_asm = """
+
+"""
 
 PUSH_TO_ASM = {CONST: const_push_asm, STATIC: static_push_asm, TEMP: temp_push_asm,
                POINTER: pointer_push_asm, ARGUMENT: general_segment_push_asm, LOCAL: general_segment_push_asm,
                THIS: general_segment_push_asm, THAT: general_segment_push_asm}
-POP_TO_ASM = {CONST: const_pop_asm, STATIC: static_pop_asm, TEMP: temp_pop_asm,
-              POINTER: pointer_pop_asm, ARGUMENT: generic_pop_asm, LOCAL: generic_pop_asm,
-              THIS: generic_pop_asm, THAT: generic_pop_asm}
+POP_TO_ASM = {STATIC: static_pop_asm, TEMP: temp_pop_asm, POINTER: pointer_pop_asm, ARGUMENT: generic_pop_asm,
+              LOCAL: generic_pop_asm, THIS: generic_pop_asm, THAT: generic_pop_asm}
 
 # assembly arithmetic commands:
-add_asm = "@SP\n\
-            A=M-1\n\
-            D=M\n\
-            A=A-1\n\
-            M=M+D\n\
-            @SP\n\
-            M=M-1"
-sub_asm = "@SP\n\
-            A=M-1\n\
-            D=M\n\
-            A=A-1\n\
-            M=M-D\n\
-            @SP\n\
-            M=M-1"
+add_subtract_asm = """
+            @SP
+            A=M-1
+            D=M
+            A=A-1
+            M=M{}D
+            @SP
+            M=M-1
+"""
+add_asm = add_subtract_asm.format("+")
+sub_asm = add_subtract_asm.format("-")
 neg_asm = "@SP\n\
             A=M-1\n\
             M=-M"
-eq_asm = ""
-gt_asm = ""
-lt_asm = ""
-and_asm = ""
-or_asm = ""
-not_asm = ""
+comparison_asm = """
+    @SP
+	A = M - 1 //A -> y
+	D = M
+	A = A - 1 // A -> x
+	D = D - M // D = y - x
+	@SP
+	M = M - 1  // SP--
+	A = M - 1
+	@TRUE
+	D; {}
+	M = 0 // false
+	(END)
+	@END
+	0; JMP // infinite loop
+	(TRUE)
+	M = -1 // true
+	0; JMP // infinite loop
+"""
+eq_asm = comparison_asm.format("JEQ")
+gt_asm = comparison_asm.format("JGT")
+lt_asm = comparison_asm.format("JLT")
+and_or_asm = """
+@SP
+A=M-1
+D=M
+A=A-1
+M=D{}M
+@SP
+M=M-1
+and
+"""
+and_asm = and_or_asm.format("&")
+or_asm = and_or_asm.format("|")
+not_asm = """
+    @SP
+    A=M-1
+    M= !M
+"""
 ARITHMETIC_TO_ASM = {add: add_asm,
                      subtract: sub_asm,
                      negate: neg_asm,
