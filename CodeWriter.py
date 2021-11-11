@@ -55,12 +55,12 @@ class CodeWriter:
             if segment in [utils.CONST, utils.TEMP, utils.POINTER, utils.STATIC]:
                 to_write = utils.PUSH_TO_ASM[segment].format(index)
             else:  # segments: local, this, that, argument
-                to_write = utils.generic_push_asm.format(index, segment)
+                to_write = utils.push_asm.format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
         elif command == "C_POP":
             if segment in [utils.CONST, utils.TEMP, utils.POINTER, utils.STATIC]:
                 to_write = utils.POP_TO_ASM[segment].format(index)
             else:  # segments: local, this, that, argument
-                to_write = utils.generic_pop_asm.format(index, segment)
+                to_write = utils.generic_pop_asm.format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
         self.output_file.write(to_write)
 
     def close(self) -> None:

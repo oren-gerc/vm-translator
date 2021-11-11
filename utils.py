@@ -13,6 +13,13 @@ THAT = "that"
 POINTER = "pointer"
 TEMP = "temp"
 
+MEMORY_SEGMENT_TO_ASM = {
+    LOCAL: "LCL",
+    ARGUMENT: "ARG",
+    THIS: "THIS",
+    THAT: "THAT",
+}
+
 # arithmetic commands
 add = "add"
 subtract = "sub"
@@ -45,30 +52,43 @@ const_pop_asm = "{}"
 temp_pop_asm = "{}"
 pointer_pop_asm = "{}"
 static_pop_asm = "{}"
-generic_push_asm = "@{0} //index\n\
-                    D=A\n\
-                    @{1} //segment\n\
-                    D=D+M\n\
-                    @addr\n\
-                    M=D\n\
-                    \n\
-                    A=M \n\
-                    D=M\n\
-                    \n\
-                    @addr\n\
-                    A=M\n\
-                    M=D\n\
-                    \n\
-                    @SP \n\
-                    M=M-1 \n"
-const_push_asm = "{}"
-temp_push_asm = "{}"
+
+push_asm = """
+//assumes D register is loaded with the value to push into stack
+//*sp=D
+@SP
+A=M
+M=D
+
+//sp++
+@SP
+M=M+1
+"""
+general_segment_push_asm = """
+@{0}
+D=A
+@{1}
+A=A+D
+D=M
+""" + push_asm
+const_push_asm = """
+@{0}
+D=A
+""" + push_asm
+static_push_asm = """
+@{0}.{1}
+D=M
+""" + push_asm
+
+# WHAT TO DO WITH THESE???
+temp_push_asm = """
+
+"""
 pointer_push_asm = "{}"
-static_push_asm = "{}"
 
 PUSH_TO_ASM = {CONST: const_push_asm, STATIC: static_push_asm, TEMP: temp_push_asm,
-               POINTER: pointer_push_asm, ARGUMENT: generic_push_asm, LOCAL: generic_push_asm,
-               THIS: generic_push_asm, THAT: generic_push_asm}
+               POINTER: pointer_push_asm, ARGUMENT: general_segment_push_asm, LOCAL: general_segment_push_asm,
+               THIS: general_segment_push_asm, THAT: general_segment_push_asm}
 POP_TO_ASM = {CONST: const_pop_asm, STATIC: static_pop_asm, TEMP: temp_pop_asm,
               POINTER: pointer_pop_asm, ARGUMENT: generic_pop_asm, LOCAL: generic_pop_asm,
               THIS: generic_pop_asm, THAT: generic_pop_asm}
@@ -78,17 +98,19 @@ add_asm = "@SP\n\
             A=M-1\n\
             D=M\n\
             A=A-1\n\
-            D=D+M\n\
-            M=D\n\
-            A=A+1"
+            M=M+D\n\
+            @SP\n\
+            M=M-1"
 sub_asm = "@SP\n\
             A=M-1\n\
             D=M\n\
             A=A-1\n\
-            D=D-M\n\
-            M=D\n\
-            A=A+1"
-neg_asm = ""
+            M=M-D\n\
+            @SP\n\
+            M=M-1"
+neg_asm = "@SP\n\
+            A=M-1\n\
+            M=-M"
 eq_asm = ""
 gt_asm = ""
 lt_asm = ""
