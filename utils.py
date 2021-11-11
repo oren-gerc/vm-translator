@@ -1,7 +1,7 @@
-enum_command_type = {1: "C_ARITHMETIC", 2: "C_PUSH", 3: "C_POP"}
-
-command_type_dict = {"add": 1, "sub": 1, "neg": 1, "eq": 1, "gt": 1, "lt": 1, "and": 1, "or": 1, "not": 1,
-                     "push": 2, "pop": 3}
+command_type_dict = {"add": "C_ARITHMETIC", "sub": "C_ARITHMETIC", "neg": "C_ARITHMETIC", "eq": "C_ARITHMETIC",
+                     "gt": "C_ARITHMETIC", "lt": "C_ARITHMETIC", "and": "C_ARITHMETIC", "or": "C_ARITHMETIC",
+                     "not": "C_ARITHMETIC",
+                     "push": "C_PUSH", "pop": "C_POP"}
 
 # memory segments
 CONST = "constant"
@@ -12,6 +12,8 @@ THIS = "this"
 THAT = "that"
 POINTER = "pointer"
 TEMP = "temp"
+
+ADDRESSES = {"THIS": 3, "THAT": 4, "TEMP": 5}
 
 MEMORY_SEGMENT_TO_ASM = {
     LOCAL: "LCL",
@@ -81,12 +83,13 @@ D=M
 temp_push_asm = """
 
 """
-pointer_push_asm = """
-
-"""
+address_push_asm = """
+@{}
+D=M
+""" + push_asm
 
 PUSH_TO_ASM = {CONST: const_push_asm, STATIC: static_push_asm, TEMP: temp_push_asm,
-               POINTER: pointer_push_asm, ARGUMENT: general_segment_push_asm, LOCAL: general_segment_push_asm,
+               POINTER: address_push_asm, ARGUMENT: general_segment_push_asm, LOCAL: general_segment_push_asm,
                THIS: general_segment_push_asm, THAT: general_segment_push_asm}
 POP_TO_ASM = {STATIC: static_pop_asm, TEMP: temp_pop_asm, POINTER: pointer_pop_asm, ARGUMENT: generic_pop_asm,
               LOCAL: generic_pop_asm, THIS: generic_pop_asm, THAT: generic_pop_asm}

@@ -52,9 +52,16 @@ class CodeWriter:
         to_write = ""
         if command == "C_PUSH":
             if segment is utils.STATIC:
-                to_write = utils.PUSH_TO_ASM[segment].format(self.file_name, index)
-            if segment in [utils.CONST, utils.TEMP, utils.POINTER]:
-                to_write = utils.PUSH_TO_ASM[segment].format(index)
+                to_write = utils.static_push_asm.format(self.file_name, index)
+            elif segment is utils.TEMP:
+                to_write = utils.address_push_asm.format(utils.ADDRESSES["THAT"] + index)
+            elif segment is utils.CONST:
+                to_write = utils.const_push_asm.format(index)
+            elif segment is utils.POINTER:
+                if index == 0:
+                    to_write = utils.address_push_asm.format(utils.ADDRESSES["THIS"])
+                elif index == 1:
+                    to_write = utils.address_push_asm.format(utils.ADDRESSES["THAT"])
             else:  # segments: local, this, that, argument
                 to_write = utils.PUSH_TO_ASM[segment].format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
         else:
