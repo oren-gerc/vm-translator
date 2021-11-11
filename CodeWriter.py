@@ -54,7 +54,7 @@ class CodeWriter:
             if segment == utils.STATIC:
                 to_write = utils.static_push_asm.format(self.file_name, index)
             elif segment == utils.TEMP:
-                to_write = utils.address_push_asm.format(utils.ADDRESSES["THAT"] + index)
+                to_write = utils.address_push_asm.format(utils.ADDRESSES["TEMP"] + index)
             elif segment == utils.CONST:
                 to_write = utils.const_push_asm.format(index)
             elif segment == utils.POINTER:
@@ -63,12 +63,19 @@ class CodeWriter:
                 elif index == 1:
                     to_write = utils.address_push_asm.format(utils.ADDRESSES["THAT"])
             else:  # segments: local, this, that, argument
-                to_write = utils.general_segment_push_asm.format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
+                to_write = utils.generic_push_asm.format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
         else:
-            if segment in [utils.CONST, utils.TEMP, utils.POINTER, utils.STATIC]:
-                to_write = utils.POP_TO_ASM[segment].format(index)
+            if segment == utils.STATIC:
+                to_write = utils.static_pop_asm.format(self.file_name, index)
+            elif segment == utils.TEMP:
+                to_write = utils.address_pop_asm.format(utils.ADDRESSES["TEMP"] + index)
+            elif segment == utils.POINTER:
+                if index == 0:
+                    to_write = utils.address_pop_asm.format(utils.ADDRESSES["THIS"])
+                elif index == 1:
+                    to_write = utils.address_pop_asm.format(utils.ADDRESSES["THAT"])
             else:  # segments: local, this, that, argument
-                to_write = utils.POP_TO_ASM[segment].format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
+                to_write = utils.generic_pop_asm.format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
 
         self.output_file.write(to_write)
 
