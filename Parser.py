@@ -45,7 +45,7 @@ class Parser:
         Returns:
             bool: True if there are more commands, False otherwise.
         """
-        return (self.command_index + 1) != len(self.commands)
+        return self.command_index < len(self.commands)
 
     def advance(self) -> None:
         """Reads the next command from the input and makes it the current 
@@ -53,7 +53,8 @@ class Parser:
         there is no current command.
         """
         self.command_index += 1
-        self.command = self.commands[self.command_index]
+        if self.command_index < len(self.commands):
+            self.command = self.commands[self.command_index]
 
     def command_type(self) -> str:
         """
