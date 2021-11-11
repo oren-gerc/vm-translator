@@ -95,9 +95,6 @@ address_push_asm = """
 D=M
 """ + push_asm
 
-POP_TO_ASM = {STATIC: static_pop_asm, TEMP: address_pop_asm, POINTER: pointer_pop_asm, ARGUMENT: generic_pop_asm,
-              LOCAL: generic_pop_asm, THIS: generic_pop_asm, THAT: generic_pop_asm}
-
 # assembly arithmetic commands:
 add_subtract_asm = """
 @SP
@@ -126,13 +123,19 @@ M = M - 1  // SP--
 A = M - 1
 @TRUE
 D; {}
-M = 0 // false
-(END)
+
+//else, set to false
+(FALSE)
+@SP
+M = 0
 @END
-0; JMP // infinite loop
+0; JMP
+
 (TRUE)
+@ SP
 M = -1 // true
-0; JMP // infinite loop
+
+(END)
 """
 eq_asm = comparison_asm.format("JEQ")
 gt_asm = comparison_asm.format("JGT")
