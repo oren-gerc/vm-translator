@@ -50,7 +50,6 @@ class CodeWriter:
             index (int): the index in the memory segment.
         """
         to_write = ""
-        print(command, segment, index)
         if command == "C_PUSH":
             if segment == utils.STATIC:
                 to_write = utils.static_push_asm.format(self.file_name, index)
@@ -64,7 +63,7 @@ class CodeWriter:
                 elif index == 1:
                     to_write = utils.address_push_asm.format(utils.ADDRESSES["THAT"])
             else:  # segments: local, this, that, argument
-                to_write = utils.PUSH_TO_ASM[segment].format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
+                to_write = utils.general_segment_push_asm.format(index, utils.MEMORY_SEGMENT_TO_ASM[segment])
         else:
             if segment in [utils.CONST, utils.TEMP, utils.POINTER, utils.STATIC]:
                 to_write = utils.POP_TO_ASM[segment].format(index)

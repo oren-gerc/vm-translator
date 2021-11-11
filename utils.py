@@ -80,17 +80,14 @@ static_push_asm = """
 @{0}.{1}
 D=M
 """ + push_asm
-temp_push_asm = """
-
-"""
 address_push_asm = """
 @{}
 D=M
 """ + push_asm
 
-PUSH_TO_ASM = {CONST: const_push_asm, STATIC: static_push_asm, TEMP: temp_push_asm,
-               POINTER: address_push_asm, ARGUMENT: general_segment_push_asm, LOCAL: general_segment_push_asm,
-               THIS: general_segment_push_asm, THAT: general_segment_push_asm}
+# PUSH_TO_ASM = {CONST: const_push_asm, STATIC: static_push_asm, TEMP: temp_push_asm,
+#                POINTER: address_push_asm, ARGUMENT: general_segment_push_asm, LOCAL: general_segment_push_asm,
+#                THIS: general_segment_push_asm, THAT: general_segment_push_asm}
 POP_TO_ASM = {STATIC: static_pop_asm, TEMP: temp_pop_asm, POINTER: pointer_pop_asm, ARGUMENT: generic_pop_asm,
               LOCAL: generic_pop_asm, THIS: generic_pop_asm, THAT: generic_pop_asm}
 
@@ -139,7 +136,6 @@ A=A-1
 M=D{}M
 @SP
 M=M-1
-and
 """
 and_asm = and_or_asm.format("&")
 or_asm = and_or_asm.format("|")
