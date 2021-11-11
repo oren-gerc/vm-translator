@@ -122,24 +122,22 @@ D = D - M // D = y - x
 M = M - 1  // SP--
 A = M - 1
 @TRUE
-D; {}
+D; {0}
 
 //else, set to false
-(FALSE)
+({1}.FALSE)
 @SP
 M = 0
 @END
 0; JMP
 
-(TRUE)
+({1}.TRUE)
 @ SP
 M = -1 // true
 
-(END)
+({1}.END)
 """
-eq_asm = comparison_asm.format("JEQ")
-gt_asm = comparison_asm.format("JGT")
-lt_asm = comparison_asm.format("JLT")
+comparison_commands = {'eq': "JEQ", 'gt': "JGT", 'lt': "JLT"}
 and_or_asm = """
 @SP
 A=M-1
@@ -159,9 +157,6 @@ M= !M
 ARITHMETIC_TO_ASM = {add: add_asm,
                      subtract: sub_asm,
                      negate: neg_asm,
-                     equals: eq_asm,
-                     greater_than: gt_asm,
-                     less_than: lt_asm,
                      logical_and: and_asm,
                      logical_or: or_asm,
                      logical_not: not_asm}
