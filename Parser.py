@@ -14,7 +14,11 @@ def clean(commands):
         if "//" in command:
             del_ind = command.find("/")
             commands[i] = command[:del_ind]
-    return commands
+    updated_commands = []
+    for command in commands:
+        if command != "":
+            updated_commands.append(command)
+    return updated_commands
 
 
 class Parser:
