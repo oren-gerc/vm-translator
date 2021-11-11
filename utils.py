@@ -127,12 +127,14 @@ D; {}
 //else, set to false
 (FALSE)
 @SP
+A = 0
 M = 0
 @END
 0; JMP
 
 (TRUE)
 @ SP
+A = M
 M = -1 // true
 
 (END)
@@ -165,3 +167,8 @@ ARITHMETIC_TO_ASM = {add: add_asm,
                      logical_and: and_asm,
                      logical_or: or_asm,
                      logical_not: not_asm}
+
+
+
+
+
