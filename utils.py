@@ -117,24 +117,24 @@ comparison_asm = """
 A = M - 1 //A -> y
 D = M
 A = A - 1 // A -> x
-D = D - M // D = y - x
+D = M - D // D = y - x
 @SP
 M = M - 1  // SP--
 A = M - 1
-@TRUE
+@{1}.TRUE
 D; {0}
 
 //else, set to false
 ({1}.FALSE)
 @SP
-A = 0
+A = M - 1
 M = 0
-@END
+@{1}.END
 0; JMP
 
 ({1}.TRUE)
 @ SP
-A = M
+A = M - 1
 M = -1 // true
 
 ({1}.END)
