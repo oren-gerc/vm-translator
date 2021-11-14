@@ -79,7 +79,7 @@ generic_push_asm = """
 @{0}
 D=A
 @{1}
-A=A+D
+A=M+D
 D=M
 """ + push_asm
 const_push_asm = """
