@@ -15,8 +15,9 @@ def clean(commands):
             del_ind = command.find("/")
             commands[i] = command[:del_ind]
     updated_commands = []
-    for command in commands:
+    for i, command in enumerate(commands):
         if command != "":
+            command = command.rstrip().lstrip()
             updated_commands.append(command)
     return updated_commands
 

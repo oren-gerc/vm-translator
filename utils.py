@@ -1,6 +1,6 @@
 command_type_dict = {"add": "C_ARITHMETIC", "sub": "C_ARITHMETIC", "neg": "C_ARITHMETIC", "eq": "C_ARITHMETIC",
                      "gt": "C_ARITHMETIC", "lt": "C_ARITHMETIC", "and": "C_ARITHMETIC", "or": "C_ARITHMETIC",
-                     "not": "C_ARITHMETIC",
+                     "not": "C_ARITHMETIC", "shiftleft": "C_ARITHMETIC", "shiftright": "C_ARITHMETIC",
                      "push": "C_PUSH", "pop": "C_POP"}
 
 # memory segments
@@ -156,12 +156,28 @@ not_asm = """
 A=M-1
 M= !M
 """
+
+shift_left_asm = """
+@SP
+A=M-1
+M= M<<
+"""
+
+shift_right_asm = """
+@SP
+A=M-1
+M= M>>
+"""
+
+
 ARITHMETIC_TO_ASM = {add: add_asm,
                      subtract: sub_asm,
                      negate: neg_asm,
                      logical_and: and_asm,
                      logical_or: or_asm,
-                     logical_not: not_asm}
+                     logical_not: not_asm,
+                     "shiftleft": shift_left_asm,
+                     "shiftright": shift_right_asm}
 
 
 
