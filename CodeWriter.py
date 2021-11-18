@@ -88,3 +88,59 @@ class CodeWriter:
     def close(self) -> None:
         """Closes the output file."""
         self.output_file.close()
+
+    def writeInit(self) -> None:
+        """
+        Writes the assembly code that effects the VM initialization (also called bootstrap code).
+        This code should be placed in the ROM beginning in address 0x0000.
+        :return:
+        """
+        pass
+
+    def writeLabel(self, label: str) -> None:
+        """
+        Writes the assembly code that is the translation of the given label command
+        :return:
+        """
+        pass
+
+    def writeGoto(self, label: str) -> None:
+        """
+        Writes the assembly code that is the translation of the given goto command.
+        :param label:
+        :return:
+        """
+        pass
+
+    def writeIf(self, label: str) -> None:
+        """
+        Writes the assembly code that is the translation of the given if-goto command.
+        :param label:
+        :return:
+        """
+        pass
+
+    def writeCall(self, functionName: str, numArgs: int) -> None:
+        """
+        Writes the assembly code that is the translation of the given Call command.
+        :param functionName:
+        :param numArgs:
+        :return:
+        """
+        pass
+
+    def writeReturn(self) -> None:
+        """
+        Writes the assembly code that is the translation of the given Return command.
+        :return:
+        """
+        pass
+
+    def writeFunction(self, functionName: str, numLocals: int) -> None:
+        """
+        Writes the assembly code that is the trans. of the given Function command.
+        :param functionName:
+        :param numLocals:
+        :return:
+        """
+        pass

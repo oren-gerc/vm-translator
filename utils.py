@@ -1,7 +1,8 @@
 command_type_dict = {"add": "C_ARITHMETIC", "sub": "C_ARITHMETIC", "neg": "C_ARITHMETIC", "eq": "C_ARITHMETIC",
                      "gt": "C_ARITHMETIC", "lt": "C_ARITHMETIC", "and": "C_ARITHMETIC", "or": "C_ARITHMETIC",
-                     "not": "C_ARITHMETIC",
-                     "push": "C_PUSH", "pop": "C_POP"}
+                     "not": "C_ARITHMETIC", "push": "C_PUSH", "pop": "C_POP",
+                     "call": "C_CALL", "return": "C_RETURN", "function": "C_FUNCTION",
+                     "if-goto": "C_IF", "goto": "C_GOTO", "label": "C_LABEL"}
 
 # memory segments
 CONST = "constant"
@@ -162,8 +163,3 @@ ARITHMETIC_TO_ASM = {add: add_asm,
                      logical_and: and_asm,
                      logical_or: or_asm,
                      logical_not: not_asm}
-
-
-
-
-
