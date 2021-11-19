@@ -139,6 +139,147 @@ M = -1 // true
 
 ({1}.END)
 """
+
+lt_asm = """
+//check lt 
+@SP
+A = M - 1
+A = A - 1
+D = M // D=x
+@{0}.X_POS
+D; JGT
+@SP
+A = M - 1
+D = M // D=y
+//check if y pos and x neg
+@{0}.Y_POS
+D; JGT
+@{0}.REG_CHECK
+0; JMP
+
+({0}.REG_CHECK)
+@SP
+A = M - 1 //A -> y
+D = M
+A = A - 1 // A -> x
+D = M - D // D = y - x
+@SP
+M = M - 1  // SP--
+A = M - 1
+@{0}.TRUE
+D; JLT
+//else, set to false
+({0}.FALSE)
+@SP
+A = M - 1
+M = 0
+@{0}.END
+0; JMP
+
+({0}.TRUE)
+@ SP
+A = M - 1
+M = -1 // true
+@{0}.END
+0; JMP
+
+({0}.Y_POS)
+@ SP
+M = M - 1
+A = M - 1
+M = -1 // true
+@{0}.END
+0;JMP
+
+({0}.X_POS)
+@ SP
+A = M - 1
+D = M // D=y
+@{0}.Y_NEG
+D; JLT
+@{0}.REG_CHECK
+0; JMP
+
+({0}.Y_NEG)
+@SP
+M = M - 1
+A = M - 1
+M = 0
+@{0}.END
+0; JMP
+
+({0}.END)
+"""
+
+gt_asm = """
+@SP
+A = M - 1
+A = A - 1
+D = M // D=x
+@{0}.X_POS
+D; JGT
+@SP
+A = M - 1
+D = M // D=y
+//check if y pos and x neg
+@{0}.Y_POS
+D; JGT
+@{0}.REG_CHECK
+0; JMP
+
+({0}.REG_CHECK)
+@SP
+A = M - 1 //A -> y
+D = M
+A = A - 1 // A -> x
+D = M - D // D = y - x
+@SP
+M = M - 1  // SP--
+A = M - 1
+@{0}.TRUE
+D; JGT
+//else, set to false
+({0}.FALSE)
+@SP
+A = M - 1
+M = 0
+@{0}.END
+0; JMP
+
+({0}.TRUE)
+@ SP
+A = M - 1
+M = -1 // true
+@{0}.END
+0; JMP
+
+({0}.Y_POS)
+@ SP
+M = M - 1
+A = M - 1
+M = 0 // false
+@{0}.END
+0;JMP
+
+({0}.X_POS)
+@ SP
+A = M - 1
+D = M // D=y
+@{0}.Y_NEG
+D; JLT
+@{0}.REG_CHECK
+0; JMP
+
+({0}.Y_NEG)
+@SP
+M = M - 1
+A = M - 1
+M = -1 // true
+@{0}.END
+0; JMP
+
+({0}.END)
+"""
 comparison_commands = {'eq': "JEQ", 'gt': "JGT", 'lt': "JLT"}
 and_or_asm = """
 @SP

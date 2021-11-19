@@ -39,8 +39,14 @@ class CodeWriter:
             command (str): an arithmetic command.
         """
         if command in utils.comparison_commands:
-            assembly = utils.comparison_asm.format(utils.comparison_commands[command],
-                                                   self._comparison_command_index)
+            assembly = ""
+            if command == 'eq':
+                assembly = utils.comparison_asm.format(utils.comparison_commands[command],
+                                                       self._comparison_command_index)
+            elif command == 'lt':
+                assembly = utils.lt_asm.format(self._comparison_command_index)
+            elif command == 'gt':
+                assembly = utils.gt_asm.format(self._comparison_command_index)
             self._comparison_command_index += 1
         else:
             assembly = utils.ARITHMETIC_TO_ASM[command]
