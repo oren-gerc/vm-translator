@@ -94,3 +94,65 @@ class CodeWriter:
     def close(self) -> None:
         """Closes the output file."""
         self.output_file.close()
+
+    def write_init(self) -> None:
+        """
+        Writes the assembly code that effects the VM initialization (also called bootstrap code).
+        This code should be placed in the ROM beginning in address 0x0000.
+        :return:
+        """
+        pass
+
+    def write_label(self, label: str) -> None:
+        """
+        Writes the assembly code that is the translation of the given label command
+        :return:
+        """
+        label_name = label.split()[0]
+        to_write = utils.label_asm.format(label_name)
+        self.output_file.write(to_write)
+
+    def write_goto(self, label: str) -> None:
+        """
+        Writes the assembly code that is the translation of the given goto command.
+        :param label:
+        :return:
+        """
+        label_name = label.split()[0]
+        to_write = utils.goto_asm.format(label_name)
+        self.output_file.write(to_write)
+
+    def write_if(self, label: str) -> None:
+        """
+        Writes the assembly code that is the translation of the given if-goto command.
+        :param label:
+        :return:
+        """
+        label_name = label.split()[0]
+        to_write = utils.if_goto_asm.format(label_name)
+        self.output_file.write(to_write)
+
+    def write_call(self, functionName: str, numArgs: int) -> None:
+        """
+        Writes the assembly code that is the translation of the given Call command.
+        :param functionName:
+        :param numArgs:
+        :return:
+        """
+        pass
+
+    def write_return(self) -> None:
+        """
+        Writes the assembly code that is the translation of the given Return command.
+        :return:
+        """
+        pass
+
+    def write_function(self, functionName: str, numLocals: int) -> None:
+        """
+        Writes the assembly code that is the trans. of the given Function command.
+        :param functionName:
+        :param numLocals:
+        :return:
+        """
+        pass

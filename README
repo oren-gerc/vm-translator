@@ -1,7 +1,7 @@
-bartsimp, lisasimp
+iris.b, oren_gerc
 ===============================================================================
-Bart Simpson, ID 011111111, bart@mail.huji.ac.il
-Lisa Simpson, ID 022222222, lisa@mail.huji.ac.il
+Iris Burmistrov, ID 318626678, iris.burmistrov@mail.huji.ac.il
+Oren Gercenshtein, ID 316120203, oren.gercenshtei@mail.huji.ac.il
 ===============================================================================
 
                            Project 7 - Virtual Machine (Arithmetic)
@@ -16,6 +16,7 @@ Makefile - A makefile for the project.
 Main.py - 
 Parser.py - 
 CodeWriter.py - 
+utils.py
 Include other files required by your project, if there are any.
 
 Remarks

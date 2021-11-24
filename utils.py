@@ -320,6 +320,24 @@ ARITHMETIC_TO_ASM = {add: add_asm,
                      "shiftleft": shift_left_asm,
                      "shiftright": shift_right_asm}
 
+label_asm = """
+({0})
+"""
+
+goto_asm = """
+@{0}
+0; JMP
+"""
+
+if_goto_asm = """
+@SP
+D=M // pop
+M=M-1 // sp--
+@{0} // load c
+D=!D // check last item is not 0
+D; JEQ
+"""
+
 
 
 
