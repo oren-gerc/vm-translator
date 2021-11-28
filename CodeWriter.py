@@ -20,6 +20,7 @@ class CodeWriter:
         self.output_file = output_stream
         self.file_name = ""
         self._comparison_command_index = 0
+        self.call_counter = 0
 
     def set_file_name(self, filename: str) -> None:
         """Informs the code writer that the translation of a new VM file has
@@ -101,15 +102,15 @@ class CodeWriter:
         This code should be placed in the ROM beginning in address 0x0000.
         :return:
         """
-        pass
+        self.output_file.write(utils.bootstrap_asm)
+        self.write_call("Sys.init", 0)
 
     def write_label(self, label: str) -> None:
         """
         Writes the assembly code that is the translation of the given label command
         :return:
         """
-        label_name = label.split()[0]
-        to_write = utils.label_asm.format(label_name)
+        to_write = utils.label_asm.format(label)
         self.output_file.write(to_write)
 
     def write_goto(self, label: str) -> None:
@@ -118,8 +119,7 @@ class CodeWriter:
         :param label:
         :return:
         """
-        label_name = label.split()[0]
-        to_write = utils.goto_asm.format(label_name)
+        to_write = utils.goto_asm.format(label)
         self.output_file.write(to_write)
 
     def write_if(self, label: str) -> None:
@@ -128,8 +128,7 @@ class CodeWriter:
         :param label:
         :return:
         """
-        label_name = label.split()[0]
-        to_write = utils.if_goto_asm.format(label_name)
+        to_write = utils.if_goto_asm.format(label)
         self.output_file.write(to_write)
 
     def write_call(self, functionName: str, numArgs: int) -> None:
@@ -139,14 +138,33 @@ class CodeWriter:
         :param numArgs:
         :return:
         """
-        pass
+        # save return address
+        return_address = utils.return_address_label.format(functionName, self.call_counter)
+        self.call_counter += 1
+        self.output_file.write(utils.const_push_asm.format(return_address))
+
+        # save LCL,ARG,THIS,THAT
+        for seg in ["LCL", "ARG", "THIS", "THAT"]:
+            self.output_file.write(utils.address_push_asm.format(seg))
+
+        # update position of LCL
+        self.output_file.write(utils.save_func_local)
+
+        # update position of ARG
+        self.output_file.write(utils.save_func_arg.format(numArgs))
+
+        # goto function (using goto)
+        self.write_goto(functionName)
+
+        # write label of return
+        self.write_label(return_address)
 
     def write_return(self) -> None:
         """
         Writes the assembly code that is the translation of the given Return command.
         :return:
         """
-        pass
+        self.output_file.write(utils.return_asm)
 
     def write_function(self, functionName: str, numLocals: int) -> None:
         """
@@ -155,4 +173,7 @@ class CodeWriter:
         :param numLocals:
         :return:
         """
-        pass
+        self.write_label(functionName)
+        # init all LCL to 0
+        for i in range(numLocals):
+            self.output_file.write(utils.const_push_asm.format(0))

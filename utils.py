@@ -310,7 +310,6 @@ A=M-1
 M= M>>
 """
 
-
 ARITHMETIC_TO_ASM = {add: add_asm,
                      subtract: sub_asm,
                      negate: neg_asm,
@@ -338,7 +337,104 @@ D=!D // check last item is not 0
 D; JEQ
 """
 
+return_address_label = """{0}$ret.{1}"""
 
+save_func_arg = """
+@{0}
+D=A
+@5
+D=D+A
+@SP
+D=M-D
+@ARG
+M=D
+"""
 
+save_func_local = """
+@SP
+D=M
+@LCL
+M=D
+"""
 
+return_asm = """
+//frame=LCL
+@LCL
+D=M
+@frame
+M=D
 
+//retAddress=*(frame-5)
+@5
+D=A
+@frame
+A=M-D
+D=M
+@retAddress
+M=D
+
+//*ARG=POP()
+@SP
+A=A-1
+D=M
+@ARG
+A=M
+M=D
+
+//SP=ARG+1
+@ARG
+D=M+1
+@SP
+M=D
+
+//THAT=*(frame-1)
+@1
+D=A
+@frame
+D=M-D
+A=D
+D=M
+@THAT
+M=D
+
+//THIS=*(frame-2)
+@2
+D=A
+@frame
+D=M-D
+A=D
+D=M
+@THIS
+M=D
+
+//ARG=*(frame-3)
+@3
+D=A
+@frame
+D=M-D
+A=D
+D=M
+@ARG
+M=D
+
+//LCL=*(frame-4)
+@4
+D=A
+@frame
+D=M-D
+A=D
+D=M
+@LCL
+M=D
+
+//goto return address
+@retAddress
+0;JMP
+"""
+
+bootstrap_asm = """
+@256
+D=A
+@SP
+M=D
+"""
