@@ -1,7 +1,8 @@
 command_type_dict = {"add": "C_ARITHMETIC", "sub": "C_ARITHMETIC", "neg": "C_ARITHMETIC", "eq": "C_ARITHMETIC",
                      "gt": "C_ARITHMETIC", "lt": "C_ARITHMETIC", "and": "C_ARITHMETIC", "or": "C_ARITHMETIC",
-                     "not": "C_ARITHMETIC", "shiftleft": "C_ARITHMETIC", "shiftright": "C_ARITHMETIC",
-                     "push": "C_PUSH", "pop": "C_POP"}
+                     "not": "C_ARITHMETIC", "push": "C_PUSH", "pop": "C_POP",
+                     "call": "C_CALL", "return": "C_RETURN", "function": "C_FUNCTION",
+                     "if-goto": "C_IF", "goto": "C_GOTO", "label": "C_LABEL"}
 
 # memory segments
 CONST = "constant"
@@ -333,8 +334,7 @@ if_goto_asm = """
 D=M // pop
 M=M-1 // sp--
 @{0} // load c
-D=!D // check last item is not 0
-D; JEQ
+D; JNE // check last item is not 0
 """
 
 return_address_label = """{0}$ret.{1}"""

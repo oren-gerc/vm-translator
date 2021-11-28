@@ -29,6 +29,14 @@ def translate_file(
         command_type = parser.command_type()
         if command_type == "C_ARITHMETIC":
             code_writer.write_arithmetic(parser.command)
+        elif command_type == "C_LABEL":
+            code_writer.write_label(parser.arg1())
+        elif command_type == "C_IF":
+            code_writer.write_if(parser.arg1())
+        elif command_type == "C_GOTO":
+            code_writer.write_goto(parser.arg1())
+        elif command_type == "C_RETURN":
+            code_writer.write_return()
         else:
             code_writer.write_push_pop(command_type, parser.arg1(), parser.arg2())
         parser.advance()
