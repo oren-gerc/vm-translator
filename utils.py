@@ -359,13 +359,14 @@ D=M
 M=D
 """
 
-return_asm = """
+save_end_frame = """
 //frame=LCL
 @LCL
 D=M
 @frame
 M=D
-
+"""
+save_return_address = """
 //retAddress=*(frame-5)
 @5
 D=A
@@ -374,7 +375,8 @@ A=M-D
 D=M
 @retAddress
 M=D
-
+"""
+return_value_to_arg = """
 //*ARG=POP()
 @SP
 A=M-1
@@ -382,57 +384,33 @@ D=M
 @ARG
 A=M
 M=D
-
+"""
+sp_after_arg = """
 //SP=ARG+1
 @ARG
 D=M+1
 @SP
 M=D
-
-//THAT=*(frame-1)
-@1
+"""
+restore_seg = """
+//SEG=*(frame-SEG_INDEX)
+@{1}
 D=A
 @frame
 D=M-D
 A=D
 D=M
-@THAT
+@{0}
 M=D
-
-//THIS=*(frame-2)
-@2
-D=A
-@frame
-D=M-D
-A=D
-D=M
-@THIS
-M=D
-
-//ARG=*(frame-3)
-@3
-D=A
-@frame
-D=M-D
-A=D
-D=M
-@ARG
-M=D
-
-//LCL=*(frame-4)
-@4
-D=A
-@frame
-D=M-D
-A=D
-D=M
-@LCL
-M=D
-
+"""
+restore_segments = restore_seg.format("THAT", 1) + restore_seg.format("THIS", 2) + restore_seg.format("ARG", 3) + restore_seg.format("LCL", 4)
+goto_return = """
 //goto return address
 @retAddress
 0;JMP
 """
+
+return_asm = save_end_frame + save_return_address + return_value_to_arg + sp_after_arg + restore_segments + goto_return
 
 bootstrap_asm = """
 @256
