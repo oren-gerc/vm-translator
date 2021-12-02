@@ -35,6 +35,8 @@ def translate_file(
             code_writer.write_if(parser.arg1())
         elif command_type == "C_GOTO":
             code_writer.write_goto(parser.arg1())
+        elif command_type == "C_FUNCTION":
+            code_writer.write_function(parser.arg1(), parser.arg2())
         elif command_type == "C_RETURN":
             code_writer.write_return()
         else:

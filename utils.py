@@ -330,9 +330,11 @@ goto_asm = """
 """
 
 if_goto_asm = """
+// if-goto command
+
 @SP
+AM=M-1 // sp--
 D=M // pop
-M=M-1 // sp--
 @{0} // load c
 D; JNE // check last item is not 0
 """
@@ -375,7 +377,7 @@ M=D
 
 //*ARG=POP()
 @SP
-A=A-1
+A=M-1
 D=M
 @ARG
 A=M

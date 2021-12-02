@@ -177,3 +177,11 @@ class CodeWriter:
         # init all LCL to 0
         for i in range(numLocals):
             self.output_file.write(utils.const_push_asm.format(0))
+
+        # for i in range(numLocals):
+        #     if i == 0:
+        #         self.output_file.write(utils.const_push_asm.format(0))
+        #     else:
+        #         # 0 is already in D, so no need to write assembly for
+        #         # inserting it to D again.
+        #         self.output_file.write(utils.generic_push_asm)
