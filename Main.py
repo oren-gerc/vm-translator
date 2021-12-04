@@ -1,9 +1,9 @@
-"""This file is part of nand2tetris, as taught in The Hebrew University,
-and was written by Aviv Yaish according to the specifications given in  
-https://www.nand2tetris.org (Shimon Schocken and Noam Nisan, 2017)
-and as allowed by the Creative Common Attribution-NonCommercial-ShareAlike 3.0 
-Unported License (https://creativecommons.org/licenses/by-nc-sa/3.0/).
-"""
+# """This file is part of nand2tetris, as taught in The Hebrew University,
+# and was written by Aviv Yaish according to the specifications given in
+# https://www.nand2tetris.org (Shimon Schocken and Noam Nisan, 2017)
+# and as allowed by the Creative Common Attribution-NonCommercial-ShareAlike 3.0
+# Unported License (https://creativecommons.org/licenses/by-nc-sa/3.0/).
+# """
 import os
 import sys
 import typing
@@ -12,7 +12,7 @@ from CodeWriter import CodeWriter
 
 
 def translate_file(
-        input_file: typing.TextIO, output_file: typing.TextIO) -> None:
+        input_file: typing.TextIO, output_file: typing.TextIO, is_init: bool) -> None:
     """Translates a single file.
 
     Args:
@@ -25,6 +25,8 @@ def translate_file(
     parser = Parser(input_file)
     code_writer = CodeWriter(output_file)
     code_writer.set_file_name(input_filename)
+    if is_init is False:
+        code_writer.write_init()
     while parser.has_more_commands():
         command_type = parser.command_type()
         if command_type == "C_ARITHMETIC":
@@ -39,6 +41,8 @@ def translate_file(
             code_writer.write_function(parser.arg1(), parser.arg2())
         elif command_type == "C_RETURN":
             code_writer.write_return()
+        elif command_type == "C_CALL":
+            code_writer.write_call(parser.arg1(), parser.arg2())
         else:
             code_writer.write_push_pop(command_type, parser.arg1(), parser.arg2())
         parser.advance()
@@ -51,6 +55,7 @@ if "__main__" == __name__:
     # Both are closed automatically when the code finishes running.
     # If the output file does not exist, it is created automatically in the
     # correct path, using the correct filename.
+    is_init = False
     if not len(sys.argv) == 2:
         sys.exit("Invalid usage, please use: VMtranslator <input path>")
     argument_path = os.path.abspath(sys.argv[1])
@@ -70,4 +75,5 @@ if "__main__" == __name__:
             if extension.lower() != ".vm":
                 continue
             with open(input_path, 'r') as input_file:
-                translate_file(input_file, output_file)
+                translate_file(input_file, output_file, is_init)
+                is_init = True

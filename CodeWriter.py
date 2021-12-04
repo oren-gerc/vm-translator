@@ -7,7 +7,6 @@ Unported License (https://creativecommons.org/licenses/by-nc-sa/3.0/).
 import typing
 import utils
 
-
 class CodeWriter:
     """Translates VM commands into Hack assembly code."""
 
@@ -21,6 +20,8 @@ class CodeWriter:
         self.file_name = ""
         self._comparison_command_index = 0
         self.call_counter = 0
+        # self.is_init = False
+
 
     def set_file_name(self, filename: str) -> None:
         """Informs the code writer that the translation of a new VM file has
@@ -102,8 +103,11 @@ class CodeWriter:
         This code should be placed in the ROM beginning in address 0x0000.
         :return:
         """
+        print("1")
         self.output_file.write(utils.bootstrap_asm)
         self.write_call("Sys.init", 0)
+
+
 
     def write_label(self, label: str) -> None:
         """

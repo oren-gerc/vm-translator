@@ -2,7 +2,7 @@ command_type_dict = {"add": "C_ARITHMETIC", "sub": "C_ARITHMETIC", "neg": "C_ARI
                      "gt": "C_ARITHMETIC", "lt": "C_ARITHMETIC", "and": "C_ARITHMETIC", "or": "C_ARITHMETIC",
                      "not": "C_ARITHMETIC", "push": "C_PUSH", "pop": "C_POP",
                      "call": "C_CALL", "return": "C_RETURN", "function": "C_FUNCTION",
-                     "if-goto": "C_IF", "goto": "C_GOTO", "label": "C_LABEL"}
+                     "if-goto": "C_IF", "goto": "C_GOTO", "label": "C_LABEL", "":"C_INIT"}
 
 # memory segments
 CONST = "constant"
@@ -363,28 +363,24 @@ save_end_frame = """
 //frame=LCL
 @LCL
 D=M
-@frame
+@R14
 M=D
 """
 save_return_address = """
 //retAddress=*(frame-5)
 @5
 D=A
-@frame
+@R14
 A=M-D
 D=M
-@retAddress
+@R15
 M=D
 """
 return_value_to_arg = """
-//*ARG=POP()
-@SP
-A=M-1
-D=M
 @ARG
-A=M
-M=D
-"""
+D=M
+""" + pop_asm
+
 sp_after_arg = """
 //SP=ARG+1
 @ARG
@@ -392,21 +388,24 @@ D=M+1
 @SP
 M=D
 """
+
 restore_seg = """
-//SEG=*(frame-SEG_INDEX)
+@R14
+D=M
 @{1}
-D=A
-@frame
-D=M-D
-A=D
+A=D-A
 D=M
 @{0}
 M=D
 """
-restore_segments = restore_seg.format("THAT", 1) + restore_seg.format("THIS", 2) + restore_seg.format("ARG", 3) + restore_seg.format("LCL", 4)
+
+restore_segments = restore_seg.format("THAT", 1) + restore_seg.format("THIS", 2) + restore_seg.format("ARG",
+                                                                                                      3) + restore_seg.format(
+    "LCL", 4)
 goto_return = """
 //goto return address
-@retAddress
+@R15
+A=M
 0;JMP
 """
 
