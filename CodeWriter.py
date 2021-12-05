@@ -189,4 +189,7 @@ class CodeWriter:
         self.write_label(functionName)
         # init all LCL to 0
         for i in range(numLocals):
-            self.output_file.write(utils.const_push_asm.format(0))
+            if i == 0:
+                self.output_file.write(utils.const_push_asm.format(0))
+            else:
+                self.output_file.write(utils.push_asm)
