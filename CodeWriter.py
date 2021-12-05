@@ -10,18 +10,20 @@ import utils
 class CodeWriter:
     """Translates VM commands into Hack assembly code."""
 
-    def __init__(self, output_stream: typing.TextIO) -> None:
+    def __init__(self) -> None:
         """Initializes the CodeWriter.
 
         Args:
             output_stream (typing.TextIO): output stream.
         """
-        self.output_file = output_stream
+        self.output_file = None
         self.file_name = ""
         self._comparison_command_index = 0
         self.call_counter = 0
         # self.is_init = False
 
+    def set_output_file(self,  output_stream: typing.TextIO):
+        self.output_file = output_stream
 
     def set_file_name(self, filename: str) -> None:
         """Informs the code writer that the translation of a new VM file has

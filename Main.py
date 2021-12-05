@@ -12,7 +12,7 @@ from CodeWriter import CodeWriter
 
 
 def translate_file(
-        input_file: typing.TextIO, output_file: typing.TextIO, is_init: bool) -> None:
+        input_file: typing.TextIO, output_file: typing.TextIO, is_init: bool, code_writer) -> None:
     """Translates a single file.
 
     Args:
@@ -23,7 +23,7 @@ def translate_file(
     # Note: you can get the input file's name using:
     input_filename, input_extension = os.path.splitext(os.path.basename(input_file.name))
     parser = Parser(input_file)
-    code_writer = CodeWriter(output_file)
+    code_writer.set_output_file(output_file)
     code_writer.set_file_name(input_filename)
     if is_init is False:
         code_writer.write_init()
@@ -56,6 +56,7 @@ if "__main__" == __name__:
     # If the output file does not exist, it is created automatically in the
     # correct path, using the correct filename.
     is_init = False
+    code_writer = CodeWriter()
     if not len(sys.argv) == 2:
         sys.exit("Invalid usage, please use: VMtranslator <input path>")
     argument_path = os.path.abspath(sys.argv[1])
@@ -69,11 +70,11 @@ if "__main__" == __name__:
         files_to_translate = [argument_path]
         output_path, extension = os.path.splitext(argument_path)
     output_path += ".asm"
-    with open(output_path, 'w') as output_file:
+    with open(output_path, 'w+') as output_file:
         for input_path in files_to_translate:
             filename, extension = os.path.splitext(input_path)
             if extension.lower() != ".vm":
                 continue
             with open(input_path, 'r') as input_file:
-                translate_file(input_file, output_file, is_init)
+                translate_file(input_file, output_file, is_init, code_writer)
                 is_init = True
