@@ -43,6 +43,7 @@ class CodeWriter:
         Args:
             command (str): an arithmetic command.
         """
+        self.output_file.write("Arithmetic command:\n")
         if command in utils.comparison_commands:
             assembly = ""
             if command == 'eq':
@@ -66,6 +67,7 @@ class CodeWriter:
             segment (str): the memory segment to operate on.
             index (int): the index in the memory segment.
         """
+        self.output_file.write("Push/Pop command:\n")
         to_write = ""
         if command == "C_PUSH":
             if segment == utils.STATIC:
@@ -106,6 +108,7 @@ class CodeWriter:
         This code should be placed in the ROM beginning in address 0x0000.
         :return:
         """
+        self.output_file.write("WRITE INIT:\n")
         self.output_file.write(utils.bootstrap_asm)
         self.write_call("Sys.init", 0)
 
@@ -114,6 +117,7 @@ class CodeWriter:
         Writes the assembly code that is the translation of the given label command
         :return:
         """
+        self.output_file.write("WRITE LABEL:\n")
         to_write = utils.label_asm.format(label)
         self.output_file.write(to_write)
 
@@ -123,6 +127,7 @@ class CodeWriter:
         :param label:
         :return:
         """
+        self.output_file.write("WRITE GOTO:\n")
         to_write = utils.goto_asm.format(label)
         self.output_file.write(to_write)
 
@@ -132,6 +137,7 @@ class CodeWriter:
         :param label:
         :return:
         """
+        self.output_file.write("WRITE IF-GOTO:\n")
         to_write = utils.if_goto_asm.format(label)
         self.output_file.write(to_write)
 
@@ -142,6 +148,7 @@ class CodeWriter:
         :param numArgs:
         :return:
         """
+        self.output_file.write("WRITE CALL:\n")
         # save return address
         return_address = utils.return_address_label.format(functionName, self.call_counter)
         self.call_counter += 1
@@ -168,6 +175,7 @@ class CodeWriter:
         Writes the assembly code that is the translation of the given Return command.
         :return:
         """
+        self.output_file.write("WRITE RETURN:\n")
         self.output_file.write(utils.return_asm)
 
     def write_function(self, functionName: str, numLocals: int) -> None:
@@ -177,6 +185,7 @@ class CodeWriter:
         :param numLocals:
         :return:
         """
+        self.output_file.write("WRITE FUNCTION:\n")
         self.write_label(functionName)
         # init all LCL to 0
         for i in range(numLocals):
