@@ -110,7 +110,7 @@ class CodeWriter:
         """
         self.output_file.write("//WRITE INIT :\n")
         self.output_file.write(utils.bootstrap_asm)
-        self.write_call("Sys.init", 0)
+        self.write_call("Sys.init",0)
 
     def write_label(self, label: str) -> None:
         """
