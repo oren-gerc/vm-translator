@@ -108,7 +108,7 @@ class CodeWriter:
         This code should be placed in the ROM beginning in address 0x0000.
         :return:
         """
-        self.output_file.write("WRITE INIT:\n")
+        self.output_file.write("WRITE INIT :\n")
         self.output_file.write(utils.bootstrap_asm)
         self.write_call("Sys.init", 0)
 
