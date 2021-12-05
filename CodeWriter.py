@@ -21,7 +21,7 @@ class CodeWriter:
         self.file_name = ""
         self._comparison_command_index = 0
         self.call_counter = 0
-        # self.is_init = False
+        self.function_name = ""
 
     def set_output_file(self, output_stream: typing.TextIO):
         self.output_file = output_stream
@@ -118,7 +118,8 @@ class CodeWriter:
         :return:
         """
         self.output_file.write("//WRITE LABEL:\n")
-        to_write = utils.label_asm.format(label)
+        updated_label = self.function_name + '$' + label
+        to_write = utils.label_asm.format(updated_label)
         self.output_file.write(to_write)
 
     def write_goto(self, label: str) -> None:
@@ -128,7 +129,8 @@ class CodeWriter:
         :return:
         """
         self.output_file.write("//WRITE GOTO:\n")
-        to_write = utils.goto_asm.format(label)
+        updated_label = self.function_name + '$' + label
+        to_write = utils.goto_asm.format(updated_label)
         self.output_file.write(to_write)
 
     def write_if(self, label: str) -> None:
@@ -138,7 +140,8 @@ class CodeWriter:
         :return:
         """
         self.output_file.write("//WRITE IF-GOTO:\n")
-        to_write = utils.if_goto_asm.format(label)
+        updated_label = self.function_name + '$' + label
+        to_write = utils.if_goto_asm.format(updated_label)
         self.output_file.write(to_write)
 
     def write_call(self, functionName: str, numArgs: int) -> None:
@@ -165,10 +168,12 @@ class CodeWriter:
         self.output_file.write(utils.save_func_arg.format(numArgs))
 
         # goto function (using goto)
-        self.write_goto(functionName)
+        self.output_file.write(utils.goto_asm.format(functionName))
+        # self.write_goto(functionName)
 
         # write label of return
-        self.write_label(return_address)
+        self.output_file.write('(' + return_address + ')')
+        # self.write_label(return_address)
 
     def write_return(self) -> None:
         """
@@ -185,8 +190,9 @@ class CodeWriter:
         :param numLocals:
         :return:
         """
+        self.function_name = functionName
         self.output_file.write("//WRITE FUNCTION:\n")
-        self.write_label(functionName)
+        self.output_file.write('(' + functionName + ')')
         # init all LCL to 0
         for i in range(numLocals):
             if i == 0:

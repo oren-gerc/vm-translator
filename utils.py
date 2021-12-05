@@ -2,7 +2,7 @@ command_type_dict = {"add": "C_ARITHMETIC", "sub": "C_ARITHMETIC", "neg": "C_ARI
                      "gt": "C_ARITHMETIC", "lt": "C_ARITHMETIC", "and": "C_ARITHMETIC", "or": "C_ARITHMETIC",
                      "not": "C_ARITHMETIC", "push": "C_PUSH", "pop": "C_POP",
                      "call": "C_CALL", "return": "C_RETURN", "function": "C_FUNCTION",
-                     "if-goto": "C_IF", "goto": "C_GOTO", "label": "C_LABEL", "":"C_INIT"}
+                     "if-goto": "C_IF", "goto": "C_GOTO", "label": "C_LABEL", "": "C_INIT"}
 
 # memory segments
 CONST = "constant"
