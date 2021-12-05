@@ -46,7 +46,6 @@ def translate_file(
         else:
             code_writer.write_push_pop(command_type, parser.arg1(), parser.arg2())
         parser.advance()
-    code_writer.close()
 
 
 if "__main__" == __name__:
@@ -78,3 +77,5 @@ if "__main__" == __name__:
             with open(input_path, 'r') as input_file:
                 translate_file(input_file, output_file, is_init, code_writer)
                 is_init = True
+                input_file.close()
+        code_writer.close()
